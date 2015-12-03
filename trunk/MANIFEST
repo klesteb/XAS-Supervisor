@@ -1,0 +1,20 @@
+Build.PL
+debian/Changes
+debian/changelog
+debian/compat
+debian/control
+debian/copyright
+debian/files
+debian/libxas-xxxx-perl.docs
+debian/postinst
+debian/postrm
+debian/preinst
+debian/rules
+debian/watch
+lib/XAS/xxxx.pm
+MANIFEST			This list of files
+perl-XAS-XXXX.spec
+README
+t/00-load.t
+t/manifest.t
+t/pod.t
