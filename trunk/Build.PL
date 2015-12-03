@@ -3,7 +3,7 @@ use warnings FATAL => 'all';
 use Module::Build;
 
 my $requires = {
-    'XAS' => '0.08',
+    'XAS' => '0.12',
 };
     
 my $sysconfig = ( -e '/etc/default' ) ? '/etc/default' : '/etc/sysconfig';
@@ -339,10 +339,10 @@ my $class = Module::Build->subclass(code => <<'EOC');
 EOC
 
 my $builder = $class->new(
-    module_name         => 'XAS-XXXX',
+    module_name         => 'XAS-Supervisor',
     license             => 'perl',
     dist_author         => q{Kevin L. Esteb <kevin@kesteb.us>},
-    dist_version_from   => 'lib/XAS/XXXX.pm',
+    dist_version_from   => 'lib/XAS/Supervisor.pm',
     release_status      => 'stable',
     configure_requires => {
         'Module::Build' => 0,
@@ -353,10 +353,10 @@ my $builder = $class->new(
     meta_add => {
         resources => {
             homepage   => 'http://scm.kesteb.us/trac',
-            repository => 'http://scm.kesteb.us/git/XAS-XXXX',
+            repository => 'http://scm.kesteb.us/git/XAS-Supervisor',
         },
     },
-    add_to_cleanup     => [ 'XAS-XXXX-*' ],
+    add_to_cleanup     => [ 'XAS-Supervisor-*' ],
     create_makefile_pl => 'traditional',
     install_path       => $install_path,
     requires           => $requires

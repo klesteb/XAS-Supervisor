@@ -3,7 +3,13 @@
 use 5.006;
 use strict;
 use warnings;
-use Test::More tests => 3;
+use Test::More;
+
+unless ( $ENV{RELEASE_TESTING} ) {
+    plan( skip_all => "Author tests not required for installation" );
+} else {
+    plan tests => 1;
+}
 
 sub not_in_file_ok {
     my ($filename, %regex) = @_;
@@ -49,7 +55,7 @@ TODO: {
     "placeholder date/time"       => qr(Date/time)
   );
 
-  module_boilerplate_ok('lib/XAS/Spooler.pm');
+  module_boilerplate_ok('lib/XAS/Supervisor.pm');
 
 
 }

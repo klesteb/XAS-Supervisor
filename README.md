@@ -1,5 +1,5 @@
-XAS xxxx - A xxxx for the XAS Environment
-===============================================
+XAS Supervisor - A process supervisor for the XAS Environment
+=============================================================
 
 XAS is a set of modules, procedures and practices to help write
 consistent Perl5 code for an operations environment. For the most part,
