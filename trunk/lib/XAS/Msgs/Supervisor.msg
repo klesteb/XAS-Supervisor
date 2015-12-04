@@ -7,6 +7,7 @@
 #
 
 [messages]
-supervisor_unable = unable to find method %s for %s
-supervisor_status = %s is currently %s
+supervisor_unable   = unable to find method %s for %s
+supervisor_status   = %s is currently "%s"
+supervisor_nostatus = unable to determine status for %s
 

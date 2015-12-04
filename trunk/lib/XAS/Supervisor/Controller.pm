@@ -2,17 +2,16 @@ package XAS::Supervisor::Controller ;
 
 our $VERSION = '0.01';
 
-use Try::Tiny;
-
 use XAS::Class
   debug     => 0,
   version   => $VERSION,
   base      => 'XAS::Lib::Net::Server',
   mixin     => 'XAS::Lib::Mixins::JSON::Server',
-  constants => ':proc',
+  constants => ':process :jsonrpc',
   vars => {
     PARAMS => {
-      -processes => 1
+      -processes => 1,
+      -retires   => { optional => 1, default => 5 },
     }
   }
 ;
@@ -53,9 +52,10 @@ sub check_status {
         1
     ]);
 
+    my $count = 0;
     my $alias = $self->alias;
 
-    $poe_kernel->delay('check_status', 5, $params, $ctx, $status);
+    $poe_kernel->delay_add('check_status', 5, $params, $ctx, $status, $count);
 
 }
 
@@ -64,7 +64,11 @@ sub check_status {
 # ----------------------------------------------------------------------
 
 sub _stop_process {
-    my ($self, $params, $ctx) = @_[OBJECT,ARG0,ARG1];
+    my $self = $_[OBJECT];
+    my ($params, $ctx) = validate_params(\@_[ARG0,ARG1], [
+        { type => HASHREF },
+        { type => HASHREF },
+    });
 
     my $alias = $self->alias;
     my $name  = $params->{'name'};
@@ -88,7 +92,11 @@ sub _stop_process {
 }
 
 sub _kill_process {
-    my ($self, $params, $ctx) = @_[OBJECT,ARG0,ARG1];
+    my $self = $_[OBJECT];
+    my ($params, $ctx) = validate_params(\@_[ARG0,ARG1], [
+        { type => HASHREF },
+        { type => HASHREF },
+    });
 
     my $alias = $self->alias;
     my $name  = $params->{'name'};
@@ -112,14 +120,22 @@ sub _kill_process {
 }
 
 sub _stat_process {
-    my ($self, $params, $ctx) = @_[OBJECT,ARG0,ARG1];
+    my $self = $_[OBJECT];
+    my ($params, $ctx) = validate_params(\@_[ARG0,ARG1], [
+        { type => HASHREF },
+        { type => HASHREF },
+    });
 
     my $alias = $self->alias;
     my $name  = $params->{'name'};
 
     if (my $process = $self->processes->{$name}) {
 
-        $process->stat_process();
+        my $stat     = $process->stat_process();
+        my $status   = $self->_convert_stat($stat);
+        my $response = $self->message('supervisor_status', $name, $status);
+
+        $self->process_response($response, $ctx);
 
     } else {
 
@@ -135,7 +151,11 @@ sub _stat_process {
 }
 
 sub _start_process {
-    my ($self, $params, $ctx) = @_[OBJECT,ARG0,ARG1];
+    my $self = $_[OBJECT];
+    my ($params, $ctx) = validate_params(\@_[ARG0,ARG1], [
+        { type => HASHREF },
+        { type => HASHREF },
+    });
 
     my $alias = $self->alias;
     my $name  = $params->{'name'};
@@ -159,7 +179,11 @@ sub _start_process {
 }
 
 sub _pause_process {
-    my ($self, $params, $ctx) = @_[OBJECT,ARG0,ARG1];
+    my $self = $_[OBJECT];
+    my ($params, $ctx) = validate_params(\@_[ARG0,ARG1], [
+        { type => HASHREF },
+        { type => HASHREF },
+    });
 
     my $alias = $self->alias;
     my $name  = $params->{'name'};
@@ -183,7 +207,11 @@ sub _pause_process {
 }
 
 sub _resume_process {
-    my ($self, $params, $ctx) = @_[OBJECT,ARG0,ARG1];
+    my $self = $_[OBJECT];
+    my ($params, $ctx) = validate_params(\@_[ARG0,ARG1], [
+        { type => HASHREF },
+        { type => HASHREF },
+    });
 
     my $alias = $self->alias;
     my $name  = $params->{'name'};
@@ -207,14 +235,20 @@ sub _resume_process {
 }
 
 sub _check_status {
-    my ($self, $params, $ctx, $status) = @_[OBJECT,ARG0,ARG1];
+    my $self = $_[OBJECT];
+    my ($params, $ctx, $status, $count) = validate_params(\@_[ARG0...ARG3], [
+        { type => HASHREF },
+        { type => HASHREF },
+        1,
+        1,
+    ]);
 
     my $alias = $self->alias;
     my $name  = $params->{'name'};
 
     if (my $process = $self->processes->{$name}) {
 
-        my $stat = $process->stat_process();
+        my $stat = $process->status();
 
         if ($stat == $status) {
 
@@ -224,7 +258,22 @@ sub _check_status {
 
         } else {
 
-            $self->check_status($params, $ctx, $status);
+            $count += 1;
+
+            if ($count < $self->retires) {
+
+                $poe_kernel->delay_add('check_status', 5, $params, $ctx, $status, $count);
+
+            } else {
+
+                my $error = {
+                    code    => RPC_ERR_APP,
+                    message => $self->message('supervisor_nostatus', $name)
+                };
+
+                $self->process_errors($error, $ctx);
+
+            }
 
         }
 
@@ -244,6 +293,23 @@ sub _check_status {
 # ----------------------------------------------------------------------
 # Private Methods
 # ----------------------------------------------------------------------
+
+sub _convert_stat {
+    my $self = shift;
+    my $stat = shift;
+
+    my $status = 'unknown';
+
+    $status = 'suspended ready'   if ($stat == 6);
+    $status = 'suspended blocked' if ($stat == 5);
+    $status = 'blocked'           if ($stat == 4);
+    $status = 'running'           if ($stat == 3);
+    $status = 'ready'             if ($stat == 2);
+    $status = 'other'             if ($stat == 1);
+
+    return $status;
+
+}
 
 sub init {
     my $class = shift;
