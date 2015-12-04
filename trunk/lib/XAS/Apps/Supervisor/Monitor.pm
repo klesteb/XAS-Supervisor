@@ -6,9 +6,11 @@ use XAS::Supervisor::Monitor;
 use XAS::Supervisor::Controller;
 
 use XAS::Class
-  debug   => 0,
-  version => $VERSION,
-  base    => 'XAS::Lib::App::Service',
+  debug     => 0,
+  version   => $VERSION,
+  base      => 'XAS::Lib::App::Service',
+  accessors => 'port host',
+  constants => ':jsonrpc',
   vars => {
     SERVICE_NAME         => 'XAS_Supervisor',
     SERVICE_DISPLAY_NAME => 'XAS Supervisor',
@@ -27,9 +29,7 @@ sub setup {
         -alias => 'controller',
         -port  => $self->port,
         -host  => $self->host,
-        -processes => XAS::Supervisor::Monitor->load(
-            -service = $self->service
-        )
+        -processes => XAS::Supervisor::Monitor->load($self->service)
     );
 
     $self->service->register('controller');

@@ -108,7 +108,7 @@ XAS::Supervisor::Monitor - A class for the XAS environment
 
  use XAS::Supervisor::Monitor;
 
- my $processes = XAS::Supervisor::Monitor->load(-service => $service);
+ my $processes = XAS::Supervisor::Monitor->load($service);
 
 =head1 DESCRIPTION
 
