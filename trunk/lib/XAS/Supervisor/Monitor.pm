@@ -7,7 +7,7 @@ use XAS::Lib::Process;
 use XAS::Class
   debug      => 0,
   version    => $VERSION,
-  base       => 'XAS::Base',
+  base       => 'Badger::Prototype XAS::Base',
   mixin      => 'XAS::Lib::Mixins::Configs',
   utils      => 'trim :env :validation',
   constants  => 'TRUE FALSE',

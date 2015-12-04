@@ -1,13 +1,15 @@
-package XAS::Supervisor::Controller ;
+package XAS::Supervisor::Controller;
 
 our $VERSION = '0.01';
 
 use POE;
+
 use XAS::Class
   debug     => 0,
   version   => $VERSION,
   base      => 'XAS::Lib::Net::Server',
   mixin     => 'XAS::Lib::Mixins::JSON::Server',
+  utils     => ':validation',
   constants => ':process :jsonrpc HASHREF',
   vars => {
     PARAMS => {
@@ -30,12 +32,13 @@ sub session_initialize {
 
     # communications from RPC.
 
-    $poe_kernel->state('stop_process',   '_stop_process',   $self);
-    $poe_kernel->state('stat_process',   '_stat_process',   $self);
-    $poe_kernel->state('start_process',  '_start_process',  $self);
-    $poe_kernel->state('pause_process',  '_pause_process',  $self);
-    $poe_kernel->state('resume_process', '_resume_process', $self);
-    $poe_kernel->state('check_status',   '_check_status',   $self);
+    $poe_kernel->state('kill_process',   $self, '_kill_process');
+    $poe_kernel->state('stop_process',   $self, '_stop_process');
+    $poe_kernel->state('stat_process',   $self, '_stat_process');
+    $poe_kernel->state('start_process',  $self, '_start_process');
+    $poe_kernel->state('pause_process',  $self, '_pause_process');
+    $poe_kernel->state('resume_process', $self, '_resume_process');
+    $poe_kernel->state('check_status',   $self, '_check_status');
 
     # walk the chain
 
