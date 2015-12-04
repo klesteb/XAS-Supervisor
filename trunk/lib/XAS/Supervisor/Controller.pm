@@ -9,7 +9,7 @@ use XAS::Class
   version   => $VERSION,
   base      => 'XAS::Lib::Net::Server',
   mixin     => 'XAS::Lib::Mixins::JSON::Server',
-  utils     => ':validation',
+  utils     => ':validation stat2text',
   constants => ':process :jsonrpc HASHREF',
   vars => {
     PARAMS => {
@@ -39,6 +39,7 @@ sub session_initialize {
     $poe_kernel->state('pause_process',  $self, '_pause_process');
     $poe_kernel->state('resume_process', $self, '_resume_process');
     $poe_kernel->state('check_status',   $self, '_check_status');
+    $poe_kernel->state('list_processes', $self, '_list_processes');
 
     # walk the chain
 
@@ -136,7 +137,7 @@ sub _stat_process {
     if (my $process = $self->processes->{$name}) {
 
         my $stat     = $process->stat_process();
-        my $status   = $self->_convert_stat($stat);
+        my $status   = stat2text($stat);
         my $response = $self->message('supervisor_status', $name, $status);
 
         $self->process_response($response, $ctx);
@@ -294,26 +295,24 @@ sub _check_status {
 
 }
 
+sub _list_processes {
+    my $self = $_[OBJECT];
+    my ($params, $ctx) = validate_params(\@_[ARG0,ARG1], [
+        { type => HASHREF },
+        { type => HASHREF },
+    ]);
+
+    my $alias = $self->alias;
+    my $list = join(',', sort(keys($self->processes)));
+    my $response = $self->message('supervisor_list', $list);
+
+    $self->process_response($response, $ctx);
+
+}
+
 # ----------------------------------------------------------------------
 # Private Methods
 # ----------------------------------------------------------------------
-
-sub _convert_stat {
-    my $self = shift;
-    my $stat = shift;
-
-    my $status = 'unknown';
-
-    $status = 'suspended ready'   if ($stat == 6);
-    $status = 'suspended blocked' if ($stat == 5);
-    $status = 'blocked'           if ($stat == 4);
-    $status = 'running'           if ($stat == 3);
-    $status = 'ready'             if ($stat == 2);
-    $status = 'other'             if ($stat == 1);
-
-    return $status;
-
-}
 
 sub init {
     my $class = shift;
@@ -326,7 +325,8 @@ sub init {
         'stat_process',
         'kill_process',
         'pause_process',
-        'resume_process'
+        'resume_process',
+        'list_processes',
     ];
 
     $self->init_json_server(\@methods);

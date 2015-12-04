@@ -10,4 +10,4 @@
 supervisor_unable   = unable to find method %s for %s
 supervisor_status   = %s is currently "%s"
 supervisor_nostatus = unable to determine status for %s
-
+supervisor_list     = the following processes are known: %s
