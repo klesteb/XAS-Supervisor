@@ -14,7 +14,7 @@
 #
 # PARAMETERS:
 #              --port         the port to listen on
-#              --host         the interface to use
+#              --address      the network address to use
 #              --log-type     toggles the log type
 #              --log-facility changes the log facility to use
 #              --log-file     name of the log file
@@ -60,7 +60,7 @@ xas-supervisor [--help] [--debug] [--manual] [--version]
 
  options:
    --port        the management port to listen on
-   --host        the network address to use
+   --address     the network address to use
    --help        outputs simple help text
    --manual      outputs the procedures manual
    --version     outputs the apps version
@@ -74,9 +74,20 @@ xas-supervisor [--help] [--debug] [--manual] [--version]
 
 This procedure is a simple template to help write standardized procedures.
 
+=head1 CONFIGURATION
+
+
 =head1 OPTIONS AND ARGUMENTS
 
 =over 4
+
+=item B<--port>
+
+The network port to listen on for management functions.
+
+=item B<--address>
+
+The network address to use.
 
 =item B<--help>
 
@@ -122,6 +133,10 @@ Prints out the apps version
 =head1 SEE ALSO
 
 =over 4
+
+=item L<XAS::Apps::Supervisor::Monitor|XAS::Apps::Supervisor::Monitor>
+
+=item L<XAS::Supervisor|XAS::Supervisor>
 
 =item L<XAS|XAS>
 

@@ -2,12 +2,13 @@ package XAS::Supervisor::Controller ;
 
 our $VERSION = '0.01';
 
+use POE;
 use XAS::Class
   debug     => 0,
   version   => $VERSION,
   base      => 'XAS::Lib::Net::Server',
   mixin     => 'XAS::Lib::Mixins::JSON::Server',
-  constants => ':process :jsonrpc',
+  constants => ':process :jsonrpc HASHREF',
   vars => {
     PARAMS => {
       -processes => 1,
@@ -29,12 +30,12 @@ sub session_initialize {
 
     # communications from RPC.
 
-    $poe_kernel->state('stop_process',   '_stop_process',  $self);
-    $poe_kernel->state('stat_process',   '_stat_process',  $self);
-    $poe_kernel->state('start_process',  '_start_process', $self);
-    $poe_kernel->state('pause_process',  '_pause_process', $self);
-    $poe_kernel->state('resume_process', '_resume_process' $self);
-    $poe_kernel->state('check_status',   '_check_status',  $self);
+    $poe_kernel->state('stop_process',   '_stop_process',   $self);
+    $poe_kernel->state('stat_process',   '_stat_process',   $self);
+    $poe_kernel->state('start_process',  '_start_process',  $self);
+    $poe_kernel->state('pause_process',  '_pause_process',  $self);
+    $poe_kernel->state('resume_process', '_resume_process', $self);
+    $poe_kernel->state('check_status',   '_check_status',   $self);
 
     # walk the chain
 
@@ -68,7 +69,7 @@ sub _stop_process {
     my ($params, $ctx) = validate_params(\@_[ARG0,ARG1], [
         { type => HASHREF },
         { type => HASHREF },
-    });
+    ]);
 
     my $alias = $self->alias;
     my $name  = $params->{'name'};
@@ -96,7 +97,7 @@ sub _kill_process {
     my ($params, $ctx) = validate_params(\@_[ARG0,ARG1], [
         { type => HASHREF },
         { type => HASHREF },
-    });
+    ]);
 
     my $alias = $self->alias;
     my $name  = $params->{'name'};
@@ -124,7 +125,7 @@ sub _stat_process {
     my ($params, $ctx) = validate_params(\@_[ARG0,ARG1], [
         { type => HASHREF },
         { type => HASHREF },
-    });
+    ]);
 
     my $alias = $self->alias;
     my $name  = $params->{'name'};
@@ -155,7 +156,7 @@ sub _start_process {
     my ($params, $ctx) = validate_params(\@_[ARG0,ARG1], [
         { type => HASHREF },
         { type => HASHREF },
-    });
+    ]);
 
     my $alias = $self->alias;
     my $name  = $params->{'name'};
@@ -183,7 +184,7 @@ sub _pause_process {
     my ($params, $ctx) = validate_params(\@_[ARG0,ARG1], [
         { type => HASHREF },
         { type => HASHREF },
-    });
+    ]);
 
     my $alias = $self->alias;
     my $name  = $params->{'name'};
@@ -211,7 +212,7 @@ sub _resume_process {
     my ($params, $ctx) = validate_params(\@_[ARG0,ARG1], [
         { type => HASHREF },
         { type => HASHREF },
-    });
+    ]);
 
     my $alias = $self->alias;
     my $name  = $params->{'name'};
@@ -321,7 +322,7 @@ sub init {
         'start_process',
         'stat_process',
         'kill_process',
-        'pause_process'
+        'pause_process',
         'resume_process'
     ];
 

@@ -50,7 +50,7 @@ sub load {
             -auto_restart   => $self->cfg->val($section, 'auto-restart', TRUE),
             -command        => $self->cfg->val($section, 'command'),
             -directory      => Dir($self->cfg->val($section, 'directory', "/")),
-            -environment    => $env;
+            -environment    => $env,
             -exit_codes     => $self->cfg->val($section, 'exit-codes', '0,1'),
             -exit_retries   => $self->cfg->val($section, 'exit-retires', 5),
             -group          => $self->cfg->val($section, 'group', 'xas'),
@@ -67,7 +67,7 @@ sub load {
                     $line  = trim($line);
                     $self->log->$level(sprintf('%s: %s', $alias, $line));
                 } else {
-                    $self->log->info(sprintf('%s: -> %s', $alias, output));
+                    $self->log->info(sprintf('%s: -> %s', $alias, $output));
                 }
             }
         );

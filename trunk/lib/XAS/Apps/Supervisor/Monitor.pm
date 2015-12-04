@@ -9,7 +9,7 @@ use XAS::Class
   debug     => 0,
   version   => $VERSION,
   base      => 'XAS::Lib::App::Service',
-  accessors => 'port host',
+  accessors => 'port address',
   constants => ':jsonrpc',
   vars => {
     SERVICE_NAME         => 'XAS_Supervisor',
@@ -26,9 +26,9 @@ sub setup {
     my $self = shift;
 
     my $controller = XAS::Supervisor::Controller->new(
-        -alias => 'controller',
-        -port  => $self->port,
-        -host  => $self->host,
+        -alias     => 'controller',
+        -port      => $self->port,
+        -address   => $self->address,
         -processes => XAS::Supervisor::Monitor->load($self->service)
     );
 
@@ -51,12 +51,12 @@ sub main {
 sub options {
     my $self = shift;
 
-    $self->{'port'} = RPC_DEFAULT_PORT;
-    $self->{'host'} = RPC_DEFAULT_HOST;
+    $self->{'port'}    = RPC_DEFAULT_PORT;
+    $self->{'address'} = RPC_DEFAULT_ADDRESS;
 
     return {
         'port=s' => \$self->{'port'},
-        'host=s' => \$self->{'host'},
+        'address=s' => \$self->{'host'},
     };
 
 }
