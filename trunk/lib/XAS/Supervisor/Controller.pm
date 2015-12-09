@@ -7,9 +7,8 @@ use POE;
 use XAS::Class
   debug     => 0,
   version   => $VERSION,
-  base      => 'XAS::Lib::Net::Server',
-  mixin     => 'XAS::Lib::Mixins::JSON::Server',
-  utils     => ':validation stat2text',
+  base      => 'XAS::Lib::RPC::JSON::Server',
+  utils     => 'stat2text :validation',
   constants => ':process :jsonrpc HASHREF',
   vars => {
     PARAMS => {
@@ -18,6 +17,8 @@ use XAS::Class
     }
   }
 ;
+
+use Data::Dumper;
 
 # ----------------------------------------------------------------------
 # Public Methods
@@ -30,7 +31,7 @@ sub session_initialize {
 
     $self->log->debug("$alias: entering session_initialize() - supervisor");
 
-    # communications from RPC.
+    # define our events.
 
     $poe_kernel->state('kill_process',   $self, '_kill_process');
     $poe_kernel->state('stop_process',   $self, '_stop_process');
@@ -40,6 +41,16 @@ sub session_initialize {
     $poe_kernel->state('resume_process', $self, '_resume_process');
     $poe_kernel->state('check_status',   $self, '_check_status');
     $poe_kernel->state('list_processes', $self, '_list_processes');
+
+    # define the RPC methods, linked to the events
+
+    $self->methods->insert('kill_process');
+    $self->methods->insert('stop_process');
+    $self->methods->insert('stat_process');
+    $self->methods->insert('pause_process');
+    $self->methods->insert('resume_process');
+    $self->methods->insert('list_processes');
+    $self->methods->insert('check_status');
 
     # walk the chain
 
@@ -69,11 +80,7 @@ sub check_status {
 # ----------------------------------------------------------------------
 
 sub _stop_process {
-    my $self = $_[OBJECT];
-    my ($params, $ctx) = validate_params(\@_[ARG0,ARG1], [
-        { type => HASHREF },
-        { type => HASHREF },
-    ]);
+    my ($self, $params, $ctx) = @_[OBJECT,ARG0,ARG1];
 
     my $alias = $self->alias;
     my $name  = $params->{'name'};
@@ -97,11 +104,7 @@ sub _stop_process {
 }
 
 sub _kill_process {
-    my $self = $_[OBJECT];
-    my ($params, $ctx) = validate_params(\@_[ARG0,ARG1], [
-        { type => HASHREF },
-        { type => HASHREF },
-    ]);
+    my ($self, $params, $ctx) = @_[OBJECT,ARG0,ARG1];
 
     my $alias = $self->alias;
     my $name  = $params->{'name'};
@@ -125,22 +128,17 @@ sub _kill_process {
 }
 
 sub _stat_process {
-    my $self = $_[OBJECT];
-    my ($params, $ctx) = validate_params(\@_[ARG0,ARG1], [
-        { type => HASHREF },
-        { type => HASHREF },
-    ]);
+    my ($self, $params, $ctx) = @_[OBJECT,ARG0,ARG1];
 
     my $alias = $self->alias;
     my $name  = $params->{'name'};
 
     if (my $process = $self->processes->{$name}) {
 
-        my $stat     = $process->stat_process();
-        my $status   = stat2text($stat);
-        my $response = $self->message('supervisor_status', $name, $status);
+        my $stat   = $process->stat_process();
+        my $status = stat2text($stat);
 
-        $self->process_response($response, $ctx);
+        $self->process_response($status, $ctx);
 
     } else {
 
@@ -156,11 +154,7 @@ sub _stat_process {
 }
 
 sub _start_process {
-    my $self = $_[OBJECT];
-    my ($params, $ctx) = validate_params(\@_[ARG0,ARG1], [
-        { type => HASHREF },
-        { type => HASHREF },
-    ]);
+    my ($self, $params, $ctx) = @_[OBJECT,ARG0,ARG1];
 
     my $alias = $self->alias;
     my $name  = $params->{'name'};
@@ -184,11 +178,7 @@ sub _start_process {
 }
 
 sub _pause_process {
-    my $self = $_[OBJECT];
-    my ($params, $ctx) = validate_params(\@_[ARG0,ARG1], [
-        { type => HASHREF },
-        { type => HASHREF },
-    ]);
+    my ($self, $params, $ctx) = @_[OBJECT,ARG0,ARG1];
 
     my $alias = $self->alias;
     my $name  = $params->{'name'};
@@ -212,11 +202,7 @@ sub _pause_process {
 }
 
 sub _resume_process {
-    my $self = $_[OBJECT];
-    my ($params, $ctx) = validate_params(\@_[ARG0,ARG1], [
-        { type => HASHREF },
-        { type => HASHREF },
-    ]);
+    my ($self, $params, $ctx) = @_[OBJECT,ARG0,ARG1];
 
     my $alias = $self->alias;
     my $name  = $params->{'name'};
@@ -240,13 +226,7 @@ sub _resume_process {
 }
 
 sub _check_status {
-    my $self = $_[OBJECT];
-    my ($params, $ctx, $status, $count) = validate_params(\@_[ARG0...ARG3], [
-        { type => HASHREF },
-        { type => HASHREF },
-        1,
-        1,
-    ]);
+    my ($self, $params, $ctx, $status, $count) = @_[OBJECT,ARG0...ARG3];
 
     my $alias = $self->alias;
     my $name  = $params->{'name'};
@@ -257,7 +237,11 @@ sub _check_status {
 
         if ($stat == $status) {
 
-            my $response = $self->message('supervisor_status', $name, $stat);
+            my $response = 'stopped';
+
+            $response = 'running' if ($stat == PROC_RUNNING);
+            $response = 'paused'  if ($stat == PROC_PAUSED);
+            $response = 'killed'  if ($stat == PROC_KILLED);
 
             $self->process_response($response, $ctx);
 
@@ -296,44 +280,18 @@ sub _check_status {
 }
 
 sub _list_processes {
-    my $self = $_[OBJECT];
-    my ($params, $ctx) = validate_params(\@_[ARG0,ARG1], [
-        { type => HASHREF },
-        { type => HASHREF },
-    ]);
+    my ($self, $params, $ctx) = @_[OBJECT,ARG0,ARG1];
 
     my $alias = $self->alias;
-    my $list = join(',', sort(keys($self->processes)));
-    my $response = $self->message('supervisor_list', $list);
+    my @response = sort(keys($self->processes));
 
-    $self->process_response($response, $ctx);
+    $self->process_response(\@response, $ctx);
 
 }
 
 # ----------------------------------------------------------------------
 # Private Methods
 # ----------------------------------------------------------------------
-
-sub init {
-    my $class = shift;
-
-    my $self = $class->SUPER::init(@_);
-
-    my @methods = [
-        'stop_process',
-        'start_process',
-        'stat_process',
-        'kill_process',
-        'pause_process',
-        'resume_process',
-        'list_processes',
-    ];
-
-    $self->init_json_server(\@methods);
-
-    return $self;
-
-}
 
 1;
 
