@@ -8,6 +8,7 @@
 
 [messages]
 supervisor_unable   = unable to find method %s for %s
-supervisor_status   = %s is currently "%s"
+supervisor_status   = the status of %s is currently "%s"
 supervisor_nostatus = unable to determine status for %s
 supervisor_list     = the following processes are known: %s
+supervisor_action   = %s: performing a "%s" on "%s"

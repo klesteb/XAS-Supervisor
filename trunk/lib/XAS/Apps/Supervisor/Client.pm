@@ -29,22 +29,22 @@ sub main {
     if (defined($self->start)) {
 
         $result = $rpc->start($self->start);
-        $message = $self->message('supervior_status', $self->status, $result);
+        $message = $self->message('supervisor_status', $self->start, $result);
 
     } elsif (defined($self->stop)) {
 
         $result = $rpc->stop($self->stop);
-        $message = $self->message('supervior_status', $self->status, $result);
+        $message = $self->message('supervisor_status', $self->stop, $result);
 
     } elsif (defined($self->pause)) {
 
         $result = $rpc->pause($self->pause);
-        $message = $self->message('supervior_status', $self->status, $result);
+        $message = $self->message('supervsior_status', $self->pause, $result);
 
     } elsif (defined($self->resume)) {
 
         $result = $rpc->resume($self->resume);
-        $message = $self->message('supervior_status', $self->status, $result);
+        $message = $self->message('supervsior_status', $self->resume, $result);
 
     } elsif (defined($self->list)) {
 
@@ -54,7 +54,7 @@ sub main {
     } elsif (defined($self->status)) {
 
         $result = $rpc->status($self->status);
-        $message = $self->message('supervior_status', $self->status, $result);
+        $message = $self->message('supervisor_status', $self->status, $result);
 
     }
 

@@ -42,15 +42,15 @@ sub session_initialize {
     $poe_kernel->state('check_status',   $self, '_check_status');
     $poe_kernel->state('list_processes', $self, '_list_processes');
 
-    # define the RPC methods, linked to the events
+    # define the RPC methods, these are linked to the above events
 
     $self->methods->insert('kill_process');
+    $self->methods->insert('start_process');
     $self->methods->insert('stop_process');
     $self->methods->insert('stat_process');
     $self->methods->insert('pause_process');
     $self->methods->insert('resume_process');
     $self->methods->insert('list_processes');
-    $self->methods->insert('check_status');
 
     # walk the chain
 
@@ -87,8 +87,11 @@ sub _stop_process {
 
     if (my $process = $self->processes->{$name}) {
 
-        $process->stop_process();
+        my $session = $process->alias;
+
+        $poe_kernel->call($session, 'stop_process');
         $self->check_status($params, $ctx, PROC_STOPPED);
+        $self->log->info_msg('supervisor_action', $alias, 'stop_process', $name);
 
     } else {
 
@@ -111,8 +114,11 @@ sub _kill_process {
 
     if (my $process = $self->processes->{$name}) {
 
-        $process->kill_process();
+        my $session = $process->alias;
+
+        $poe_kernel->call($session, 'kill_process');
         $self->check_status($params, $ctx, PROC_KILLED);
+        $self->log->info_msg('supervisor_action', $alias, 'kill_process', $name);
 
     } else {
 
@@ -139,6 +145,7 @@ sub _stat_process {
         my $status = stat2text($stat);
 
         $self->process_response($status, $ctx);
+        $self->log->info_msg('supervisor_action', $alias, 'stat_process', $name);
 
     } else {
 
@@ -161,8 +168,11 @@ sub _start_process {
 
     if (my $process = $self->processes->{$name}) {
 
-        $process->start_process();
+        my $session = $process->alias;
+
+        $poe_kernel->call($session, 'start_process');
         $self->check_status($params, $ctx, PROC_RUNNING);
+        $self->log->info_msg('supervisor_action', $alias, 'start_process', $name);
 
     } else {
 
@@ -185,8 +195,11 @@ sub _pause_process {
 
     if (my $process = $self->processes->{$name}) {
 
-        $process->pause_process();
+        my $session = $process->alias;
+
+        $poe_kernel->call($session, 'pause_process');
         $self->check_status($params, $ctx, PROC_PAUSED);
+        $self->log->info_msg('supervisor_action', $alias, 'pause_process', $name);
 
     } else {
 
@@ -209,8 +222,11 @@ sub _resume_process {
 
     if (my $process = $self->processes->{$name}) {
 
-        $process->resume_process();
+        my $session = $process->alias;
+
+        $poe_kernel->call($session, 'resume_process');
         $self->check_status($params, $ctx, PROC_RUNNING);
+        $self->log->info_msg('supervisor_action', $alias, 'resume_process', $name);
 
     } else {
 
@@ -286,6 +302,7 @@ sub _list_processes {
     my @response = sort(keys($self->processes));
 
     $self->process_response(\@response, $ctx);
+    $self->log->info_msg('supervisor_action', $alias, 'list_processes', '');
 
 }
 
