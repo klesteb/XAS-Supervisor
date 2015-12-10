@@ -15,6 +15,7 @@ XAS::Supervisor - A set of modules and utilities to supervise processes
 
 =head1 SYNOPSIS
 
+
 =head1 DESCRIPTION
 
 =head1 SEE ALSO
