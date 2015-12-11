@@ -11,16 +11,30 @@ __END__
   
 =head1 NAME
 
-XAS::Supervisor - A set of modules and utilities to supervise processes
+XAS::Supervisor - A set of modules and procedures to supervise processes
 
 =head1 SYNOPSIS
 
-
 =head1 DESCRIPTION
+
+A superivsor is a process that manages other processes. This package provides
+this capability for XAS. 
 
 =head1 SEE ALSO
 
 =over 4
+
+=item L<XAS::Apps::Supervisor::Client|XAS::Apps::Supervisor::Client>
+
+=item L<XAS::Apps::Supervisor::Monitor|XAS::Apps::Supervisor::Monitor>
+
+=item L<XAS::Docs::Supervisor::Installation|XAS::Docs::Supervisor::Installation>
+
+=item L<XAS::Supervisor::Client|XAS::Supervisor::Client>
+
+=item L<XAS::Supervisor::Controller|XAS::Supervisor::Controller>
+
+=item L<XAS::Supervisor::Monitor|XAS::Supervisor::Monitor>
 
 =item L<XAS|XAS>
 

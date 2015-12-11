@@ -46,6 +46,23 @@ sub stop {
 
 }
 
+sub kill {
+    my ($self, $name) = @_;
+
+    my $params = {
+        name => $name
+    };
+
+    my $result = $self->call(
+        -method => 'kill_process',
+        -id     => $self->id,
+        -params => $params
+    );
+
+    return $result;
+
+}
+
 sub pause {
     my ($self, $name) = @_;
 
@@ -173,7 +190,7 @@ the same parameters.
 =head2 start($name)
 
 This method will start a managed process. It takes one parameter, the name
-of the process, and returns "started" if successful.
+of the process, and returns "running" if successful.
 
  Example:
 
@@ -188,19 +205,61 @@ the process, and returns "stopped" if successful.
 
      my $result = $rpc->stop('sleeper');
 
-=head2 status($name)
+=head2 pause($name)
 
-This method will do a "stat" on a managed process. It takes one parameter,
-the name of the process, and returns "alive" if the process is running or
-"dead" if the process is not.
-
-=head2 list
-
-This method will list the known process on the target supervisor.
+This method will pause a managed process. It takes one parameter, the name of
+the process, and returns "paused" if successful.
 
  Example:
 
-     my $result = $rpc->list();
+     my $result = $rpc->pause('sleeper');
+
+=head2 resume($name)
+
+This method will resume a managed process. It takes one parameter, the name of
+the process, and returns "running" if successful.
+
+ Example:
+
+     my $result = $rpc->resume('sleeper');
+
+=head2 kill($name)
+
+This method will kill a managed process. It takes one parameter, the name of
+the process, and returns "killed" if successful.
+
+ Example:
+
+     my $result = $rpc->kill('sleeper');
+
+=head2 status($name)
+
+This method will do a "stat" on a managed process. The process status will 
+be from the OS level. It can be one of the following:
+
+ 'unknown'
+ 'other'
+ 'ready'
+ 'running'
+ 'blocked'
+ 'suspended blocked'
+ 'suspended ready'
+
+=head2 list
+
+This method will list the known processes on the target supervisor.
+
+ Example:
+
+     my $results = $rpc->list();
+
+     printf("Known processes\n");
+
+     foreach my $result (@$results) {
+
+         printf('%s\n", $result);
+
+     }
 
 =head1 SEE ALSO
 

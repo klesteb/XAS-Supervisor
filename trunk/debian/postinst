@@ -1,10 +1,10 @@
 #!/bin/sh
 #
 # File: postinst
-# Date: 30-Jun-2014
+# Date: 11-Dec-2015
 # By  : Kevin Esteb
 #
-# postinst script for libxas-xxxx-perl
+# postinst script for libxas-supervisor-perl
 #
 # Create the directory structure needed and set permissions
 #

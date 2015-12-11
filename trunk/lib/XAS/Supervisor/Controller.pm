@@ -316,13 +316,23 @@ __END__
 
 =head1 NAME
 
-XAS::xxx - A class for the XAS environment
+XAS::Supervisor::Controller - manage multiple processes
 
 =head1 SYNOPSIS
 
- use XAS::XXX;
+ use XAS::Supervisor::Controller;
+
+ my $controller = XAS::Supervisor::Controller->new(
+    -alias     => 'controller',
+    -port      => '9506',
+    -address   => '127.0.0.1,
+    -processes => $processes
+ );
+
+ $controller->run;
 
 =head1 DESCRIPTION
+
 
 =head1 METHODS
 
@@ -331,6 +341,8 @@ XAS::xxx - A class for the XAS environment
 =head1 SEE ALSO
 
 =over 4
+
+=item L<XAS::Supervisor|XAS::Supervisor>
 
 =item L<XAS|XAS>
 

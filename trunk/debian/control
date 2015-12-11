@@ -1,15 +1,19 @@
-Source: libxas-xxxx-perl
+Source: libxas-supervisor-perl
 Section: perl
 Priority: optional
 Build-Depends: debhelper (>= 7), perl
 Maintainer: kevin l. esteb <kevin@kesteb.us>
 Standards-Version: 3.9.4
-Homepage: http://search.cpan.org/dist/XAS/xxxx
+Homepage: http://scm.kesteb.us/trac
 
-Package: libxas-xxxx-perl
+Package: libxas-supervisor-perl
 Architecture: all
 Depends: ${misc:Depends}, ${perl:Depends}
-Description: Middelware for Perl
+Description: Middleware for Datacenter Operations - supervisor
  .
- XAS is middleware for Perl. It provides standardized methods, modules
- and philosophy for constructing large distributed applications.
+ XAS is Middleware for Datacenter Operations. It provides standardized
+ methods, modules and philosophy for constructing large distributed
+ applications that are the backbone of your operations center.
+ .
+ This package provides the supervisor modules. This supervisor will
+ monitor and manage background processes.

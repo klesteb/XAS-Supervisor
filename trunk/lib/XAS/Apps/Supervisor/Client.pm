@@ -5,7 +5,7 @@ use XAS::Supervisor::Client;
 use XAS::Class
   version   => '0.03',
   base      => 'XAS::Lib::App',
-  accessors => 'port host start stop pause resume status list',
+  accessors => 'port host start stop pause resume status list kill',
   constants => ':jsonrpc',
 ;
 
@@ -51,6 +51,11 @@ sub main {
         $result = $rpc->list($self->list);
         $message = $self->message('supervisor_list', join(',', @$result));
 
+    } elsif (defined($self->kill)) {
+
+        $result = $rpc->kill($self->kill);
+        $message = $self->message('supervisor_status', $self->kill, $result);
+
     } elsif (defined($self->status)) {
 
         $result = $rpc->status($self->status);
@@ -75,6 +80,7 @@ sub options {
     $self->{'resume'} = undef;
     $self->{'pause'}  = undef;
     $self->{'list'}   = undef;
+    $self->{'kill'}   = undef;
 
     return {
         'host=s'   => \$self->{'host'},
@@ -84,6 +90,7 @@ sub options {
         'status=s' => \$self->{'status'},
         'pause=s'  => \$self->{'pause'},
         'resume=s' => \$self->{'resume'},
+        'kill=s'   => \$self->{'kill'},
         'list'     => \$self->{'list'},
     };
 
@@ -141,6 +148,10 @@ Request that a process be paused.
 =head2 --resume
 
 Request that a process be resumed.
+
+=head2 --kill
+
+Request that a process be killed.
 
 =head2 --status
 
