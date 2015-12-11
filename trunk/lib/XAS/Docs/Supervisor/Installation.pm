@@ -103,7 +103,7 @@ Now you can check the log files for any errors and proceed from there.
 After installing, you can find documentation for this module with the
 perldoc command.
 
-    perldoc XAS-Supervisor
+    perldoc XAS::Supervisor
 
 Extended documentation is available here:
 

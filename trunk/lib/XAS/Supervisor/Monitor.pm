@@ -158,7 +158,7 @@ Please see L<XAS::Lib::Process|XAS::Lib::Process> for more details.
 =head2 new
 
 Initialize the module. This will load the configuration file. Not neccessary
-to be invoked as invoking load() will do the samething. 
+to be invoked as invoking load() will do the same thing. 
 
 =head2 load
 

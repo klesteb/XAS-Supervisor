@@ -15,6 +15,8 @@
 # PARAMETERS:
 #              --port         the port to listen on
 #              --address      the network address to use
+#              --cfg-file     which configuration file to use
+#              --pid-file     which pid file to use
 #              --log-type     toggles the log type
 #              --log-facility changes the log facility to use
 #              --log-file     name of the log file
@@ -59,23 +61,30 @@ xas-supervisor - supervise and manage background processes
 xas-supervisor [--help] [--debug] [--manual] [--version]
 
  options:
-   --port        the management port to listen on
-   --address     the network address to use
-   --help        outputs simple help text
-   --manual      outputs the procedures manual
-   --version     outputs the apps version
-   --debug       toogles debugging output
-   --alerts      toogles alert notifications
-   --log-file    name of the log file 
-   --log-type    toggles the log type
-   --log-facilty changes the log facility
+   --port         the management port to listen on
+   --address      the network address to use
+   --help         outputs simple help text
+   --manual       outputs the procedures manual
+   --version      outputs the apps version
+   --debug        toogles debugging output
+   --alerts       toogles alert notifications
+   --cfg-file     which configuration file to use
+   --pid-file     which pid file to use
+   --log-file     name of the log file 
+   --log-type     toggles the log type
+   --log-faciilty changes the log facility
 
 =head1 DESCRIPTION
 
-This procedure is a simple template to help write standardized procedures.
+This procedure reads a configuration file and spawns multiple background
+processes. It will then try to keep those processes running. External 
+management tools can send commands to the supervisor to control those
+background processes.
 
 =head1 CONFIGURATION
 
+Please refer to L<XAS::Supervisor::Monitor|XAS::Supervisor::Monitor> for 
+configuration file information.
 
 =head1 OPTIONS AND ARGUMENTS
 
@@ -88,6 +97,14 @@ The network port to listen on for management functions.
 =item B<--address>
 
 The network address to use.
+
+=item B<-cfg-file>
+
+The configuration file to use.
+
+=item B<--pid-file>
+
+The pid file to use.
 
 =item B<--help>
 

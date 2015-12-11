@@ -17,6 +17,7 @@
 #              --stop         stop a process
 #              --pause        pause a process
 #              --resume       resume a process
+#              --kill         kills a process
 #              --status       returns the status of a process
 #              --list         list processes
 #              --log-type     toggles the log type
@@ -34,7 +35,7 @@
 #
 # Version      Author                                              Date
 # -------      ----------------------------------------------      -----------
-# 0.01         Kevin Esteb                                         02-Apr-2009
+# 0.01         Kevin Esteb                                         03-Dec-2015
 #
 # ============================================================================
 #
@@ -65,6 +66,7 @@ xas-supctl [--help] [--debug] [--manual] [--version]
  options:
    --start        start a process
    --stop         stop a process
+   --kill         kills a process
    --pause        pause a process
    --resume       resume a process
    --status       returns the status of a process
@@ -95,6 +97,10 @@ Starts the named process.
 
 Stops the named process.
 
+=item B<--kill> <name>
+
+Kills the named process.
+
 =item B<--pause> <name>
 
 Pauses the named process.
@@ -103,7 +109,7 @@ Pauses the named process.
 
 Resumes the named process.
 
-=item B<--status>
+=item B<--status> <name>
 
 Returns the status of the named process.
 
