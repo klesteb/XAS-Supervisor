@@ -151,7 +151,9 @@ start a process. The following defaults are defined:
  user = xas
  redirect = 0
 
-Please see L<XAS::Lib::Process|XAS::Lib::Process> for more details.
+Please see L<XAS::Lib::Process|XAS::Lib::Process> for more details. If 
+"redirect" is 1, all output from that process will be written to the
+supervisors log file.
 
 =head1 METHODS
 
@@ -168,6 +170,10 @@ hash of the loaded processes.
 =head1 SEE ALSO
 
 =over 4
+
+=item L<XAS::Supervisor::Client|XAS::Supervisor::Client>
+
+=item L<XAS::Supervisor::Controller|XAS::Supervisor::Controller>
 
 =item L<XAS::Supervisor|XAS::Supervisor>
 

@@ -13,12 +13,27 @@ __END__
 
 XAS::Supervisor - A set of modules and procedures to supervise processes
 
-=head1 SYNOPSIS
-
 =head1 DESCRIPTION
 
-A superivsor is a process that manages other processes. This package provides
-this capability for XAS. 
+A superivsor is a process that manages other processes. On Unix this would be
+similar to init, which is the master process. 
+
+=head2 xas-supervisor
+
+This is the control process. It reads a configuration file to see what 
+processes to start. Once they are started, the supervisor will make sure that 
+they continue to run. 
+
+When a process exits, the supervisor checks the exit status. If that status is
+known, it will restart the process otherwise it will send alert that the process
+has stopped.
+
+=head2 xas-supctl
+
+This is a command line tool to communicate with the supervisor. With this
+tool you can stop, start, pause, resume or kill a managed process. You 
+can also retrieve all of the processes that the supervisor knows about and
+you can check the status of individual processes.
 
 =head1 SEE ALSO
 

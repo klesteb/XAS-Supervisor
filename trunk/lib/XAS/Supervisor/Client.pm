@@ -170,7 +170,7 @@ XAS::Supervisor::Client - The RPC interface to the Supervisor
 
 =head1 DESCRIPTION
 
-This is the client module for external access to the XAS Supervisor. 
+This is the client module for RPC access to the XAS Supervisor. 
 
 =head1 METHODS
 
@@ -264,6 +264,10 @@ This method will list the known processes on the target supervisor.
 =head1 SEE ALSO
 
 =over 4
+
+=item L<XAS::Supervisor::Controller|XAS::Supervisor::Controller>
+
+=item L<XAS::Supervisor::Monitor|XAS::Supervisor::Monitor>
 
 =item L<XAS::Supervisor|XAS::Supervisor>
 

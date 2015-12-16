@@ -165,6 +165,8 @@ List the known processes on the supervisor
 
 =over 4
 
+=item L<XAS::Supervisor::Client|XAS::Supervisor::Client>
+
 =item L<XAS::Supervisor|XAS::Supervisor>
 
 =item L<XAS|XAS>

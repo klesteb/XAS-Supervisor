@@ -333,14 +333,85 @@ XAS::Supervisor::Controller - manage multiple processes
 
 =head1 DESCRIPTION
 
+This module provides a RPC interface to the supervisor. This interface allows
+external access to stop, start, pause, resume and kill processes. It also
+provides a means to to retrieve the status of a process and to list all the
+known processes.
 
 =head1 METHODS
 
-=head2 method1
+=head2 new
+
+This module inherits from L<XAS::Lib::JSON::RPC::Server|XAS::Lib::JSON::RPC::Server>
+and takes all of the same parameters.
+
+=head2 session_initialize
+
+This method sets up the process for the rpc calls.
+
+=head2 check_status
+
+This method starts a background task to check the status of RPC calls. 
+
+=head1 RPC CALLS
+
+The following rpc calls are supported. L<XAS::Supervisor::Client|XAS::Supervisor::Client>
+has this interface already defined and should be used when writting new code.
+
+=head2 start_process
+
+This will start a process. The rpc parameters should use 'name' with the 
+processes name. If the start was successful, "running" will be returned.
+
+=head2 stop_process
+
+This will stop a process. The rpc parameters should use 'name' with the 
+processes name. If the stop was successful, "stopped" will 
+be returned.
+
+=head2 pause_process
+
+This will pause a process. The rpc parameters should use 'name' with the 
+processes name. If the pause was successful, "paused" will 
+be returned.
+
+=head2 resume_process
+
+This will resume a process. The rpc parameters should use 'name' with the 
+processes name. If the resume was successful, "running" will 
+be returned.
+
+=head2 kill_process
+
+This will kill a process. The rpc parameters should use 'name' with the 
+processes name. If the kill was successful, "killed" will 
+be returned.
+
+=head2 stat_process
+
+This will perform an OS level stat on the process. The rpc parameters should 
+use 'name' with the processes name. It will return one of the
+following.
+
+ 'suspended ready'
+ 'suspended blocked'
+ 'blocked'
+ 'running'
+ 'ready'
+ 'other'
+ 'unknown'
+
+=head2 list_process
+
+This will return a list of all the processes that the supervisor knows of.
 
 =head1 SEE ALSO
 
 =over 4
+
+=item L<XAS::Supervisor::Client|XAS::Supervisor::Client>
+
+=item L<XAS::Supervisor::Monitor|XAS::Supervisor::Monitor>
 
 =item L<XAS::Supervisor|XAS::Supervisor>
 

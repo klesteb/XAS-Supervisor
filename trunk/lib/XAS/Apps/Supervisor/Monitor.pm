@@ -100,11 +100,27 @@ This method will start the processing.
 
 =head2 options
 
-This method defines the command line options.
+These are the additional options.
+
+=over 4
+
+=item B<--port>
+
+This defines the port to list on. Defaults to RPC_DEFAULT_PORT.
+
+=item B<--address>
+
+This defines the address to bind too. Defaults to RPC_DEFAULT_ADDRESS.
+
+=back
 
 =head1 SEE ALSO
 
 =over 4
+
+=item L<XAS::Supervisor::Controller|XAS::Supervisor::Controller>
+
+=item L<XAS::Supervisor::Monitor|XAS::Supervisor::Monitor>
 
 =item L<XAS::Supervisor>
 
