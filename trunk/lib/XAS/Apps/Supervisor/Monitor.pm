@@ -122,7 +122,7 @@ This defines the address to bind too. Defaults to RPC_DEFAULT_ADDRESS.
 
 =item L<XAS::Supervisor::Monitor|XAS::Supervisor::Monitor>
 
-=item L<XAS::Supervisor>
+=item L<XAS::Supervisor|XAS::Supervisor>
 
 =item L<XAS|XAS>
 

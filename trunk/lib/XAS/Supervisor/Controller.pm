@@ -342,7 +342,7 @@ known processes.
 
 =head2 new
 
-This module inherits from L<XAS::Lib::JSON::RPC::Server|XAS::Lib::JSON::RPC::Server>
+This module inherits from L<XAS::Lib::RPC::JSON::Server|XAS::Lib::RPC::JSON::Server>
 and takes all of the same parameters.
 
 =head2 session_initialize
