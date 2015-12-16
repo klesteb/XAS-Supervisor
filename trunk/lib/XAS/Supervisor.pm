@@ -15,8 +15,12 @@ XAS::Supervisor - A set of modules and procedures to supervise processes
 
 =head1 DESCRIPTION
 
-A superivsor is a process that manages other processes. On Unix this would be
+A supervisor is a process that manages other processes. On Unix this would be
 similar to init, which is the master process. 
+
+=head1 UTILITIES
+
+These utilities are provided with this package.
 
 =head2 xas-supervisor
 
