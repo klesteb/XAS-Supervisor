@@ -32,6 +32,8 @@ When a process exits, the supervisor checks the exit status. If that status is
 known, it will restart the process otherwise it will send alert that the process
 has stopped.
 
+The configuration file is documented here: L<XAS::Apps::Supervisor::Monitor|XAS::Apps::Supervisor::Monitor>
+
 =head2 xas-supctl
 
 This is a command line tool to communicate with the supervisor. With this
