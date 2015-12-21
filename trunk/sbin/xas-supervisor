@@ -83,7 +83,7 @@ background processes.
 
 =head1 CONFIGURATION
 
-Please refer to L<XAS::Supervisor::Monitor|XAS::Supervisor::Monitor> for 
+Please refer to L<XAS::Apps::Supervisor::Monitor|XAS::Apps::Supervisor::Monitor> for 
 configuration file information.
 
 =head1 OPTIONS AND ARGUMENTS

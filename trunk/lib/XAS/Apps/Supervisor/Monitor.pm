@@ -88,6 +88,46 @@ XAS::Apps::Supervisor::Monitor - A class for the XAS environment
 This module will spawn multiple processes. It will keep track
 of them and restart them if they should stop.
 
+=head1 CONFIGURATION
+
+The configuration file is the familiar Windows .ini format. It has the
+following stanzas.
+
+ [supervisor: xas-logmon]
+ auto-start = 1
+ auto-restart = 1
+ command = xas-logmon 
+ directory = /
+ environment = name1=value1;;name2=value2
+ exit-codes = 0,1
+ exit-retires = 5
+ group = xas
+ priority = 0
+ umask = 0022
+ user = xas
+ redirect = 0
+
+This stanza defines a process to manage. There can be multiple stanzas. The
+"xas-logmon" in the stanza name must be unique and is associated with the
+process. This name is used to control this process. Reasonable defaults
+have been defined within the code. You really only need to use 'command' to
+start a process. The following defaults are defined:
+
+ auto-start = 1
+ auto-restart = 1
+ directory = /
+ exit-codes = 0,1
+ exit-retires = 5
+ group = xas
+ priority = 0
+ umask = 0022
+ user = xas
+ redirect = 0
+
+Please see L<XAS::Lib::Process|XAS::Lib::Process> for more details. If 
+"redirect" is 1, all output from that process will be written to the
+supervisors log file.
+
 =head1 METHODS
 
 =head2 setup
