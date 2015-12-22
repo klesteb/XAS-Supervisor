@@ -1,7 +1,6 @@
 Build.PL
 Changes
 debian/changelog
-debian/Changes
 debian/compat
 debian/control
 debian/copyright
