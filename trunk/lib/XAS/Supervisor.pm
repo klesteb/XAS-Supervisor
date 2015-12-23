@@ -32,6 +32,18 @@ When a process exits, the supervisor checks the exit status. If that status is
 known, it will restart the process otherwise it will send alert that the process
 has stopped.
 
+=over 4
+
+=item B<xas-supervisor --help>
+
+This will display a brief help screen on command options.
+
+=item B<xas-supervisor --manual>
+
+This will display the utilities man page.
+
+=back
+
 The configuration file is documented here: L<XAS::Apps::Supervisor::Monitor|XAS::Apps::Supervisor::Monitor>
 
 =head2 xas-supctl
@@ -40,6 +52,18 @@ This is a command line tool to communicate with the supervisor. With this
 tool you can stop, start, pause, resume or kill a managed process. You 
 can also retrieve all of the processes that the supervisor knows about and
 you can check the status of individual processes.
+
+=over 4
+
+=item B<xas-supctl --help>
+
+This will display a brief help screen on command options.
+
+=item B<xas-supctl --manual>
+
+This will display the utilities man page.
+
+=back
 
 =head1 SEE ALSO
 
