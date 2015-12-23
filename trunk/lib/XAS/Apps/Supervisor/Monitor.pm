@@ -110,23 +110,71 @@ following stanzas.
 This stanza defines a process to manage. There can be multiple stanzas. The
 "xas-logmon" in the stanza name must be unique and is associated with the
 process. This name is used to control this process. Reasonable defaults
-have been defined within the code. You really only need to use 'command' to
-start a process. The following defaults are defined:
+have been defined. You really only need to use 'command' to start a process. 
 
- auto-start = 1
- auto-restart = 1
- directory = /
- exit-codes = 0,1
- exit-retires = 5
- group = xas
- priority = 0
- umask = 0022
- user = xas
- redirect = 0
+The following properties may be used.
 
-Please see L<XAS::Lib::Process|XAS::Lib::Process> for more details. If 
-"redirect" is 1, all output from that process will be written to the
-supervisors log file.
+=over 4
+
+=item B<auto-start>
+
+This indicates that the process should auto start. Defaults to 1.
+
+=item B<auto-restart>
+
+This indicates wither the process should auto restart the process should it
+exit. This would match the exit code to the exit-code parameter. If they
+match, then the process would be restarted. Defaults to 1.
+
+=item B<directory>
+
+The default directory to set for the process. Defaults to "/".
+
+=item B<environment>
+
+Optional additional environment variables to pass to the process. This should
+be in this form "key1=value1;;key2=value2".
+
+=item B<exit-codes>
+
+The possible exit codes that might be returned if the process aborts. These
+are used to determine if the process should be restarted. Defaults to "0,1".
+This must be a comma delimited list of values.
+
+=item B<exit-retires>
+
+The number of retries for restarting the process. Defaults to "5". If this is
+"-1" then retries are unlimited. Use with caution.
+
+=item B<group>
+
+The group to run the process under. Defaults to "xas". Not implemented under
+Windows.
+
+=item B<priority>
+
+The priority to run the process under. Defaults to "0". Not implemented under
+Windows.
+
+=item B<redirect>
+
+This indicates that stdout and stderr are to be redirected to the supervisor.
+Any output from those streams are logged to the supervisors log file. Defaults
+to 0.
+
+=item B<umask>
+
+The umask to use for the process. Defaults to "0022". Not implemented under
+Windows.
+
+=item B<user>
+
+The user to run the process under. Defaults to "xas". Not implemented under
+Windows.
+
+=back
+
+Please see L<XAS::Lib::Process|XAS::Lib::Process> for more details. 
 
 =head1 METHODS
 
