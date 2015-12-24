@@ -4,7 +4,6 @@ debian/changelog
 debian/compat
 debian/control
 debian/copyright
-debian/files
 debian/libxas-supervisor-perl.docs
 debian/postinst
 debian/postrm
