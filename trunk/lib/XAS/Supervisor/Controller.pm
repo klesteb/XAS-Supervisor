@@ -1,6 +1,6 @@
 package XAS::Supervisor::Controller;
 
-our $VERSION = '0.01';
+our $VERSION = '0.05';
 
 use POE;
 
