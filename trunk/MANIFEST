@@ -16,7 +16,7 @@ init.d/xas-supervisor.debian
 init.d/xas-supervisor.rhel
 lib/XAS/Apps/Supervisor/Client.pm
 lib/XAS/Apps/Supervisor/Monitor.pm
-lib/XAS/Docs/Supervisor/Installtion.pm
+lib/XAS/Docs/Supervisor/Installation.pm
 lib/XAS/Msgs/Supervisor.msg
 lib/XAS/Supervisor.pm
 lib/XAS/Supervisor/Client.pm
